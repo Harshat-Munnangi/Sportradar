@@ -28,7 +28,7 @@ public class FootballDashboardImpl implements FootballDashborad {
 					break;
 				}
 				case 2 -> {
-					printOption(2);
+					finishMatch(in);
 					break;
 				}
 				case 3 -> {
@@ -92,6 +92,32 @@ public class FootballDashboardImpl implements FootballDashborad {
 			return false;
 		}
 		return true;
+	}
+	
+	private void finishMatch(Scanner sc) {
+		if (matchesExist()) {
+			int matchSeleted = sc.nextInt() - 1;
+			if (matchSeleted < matches.size() && matchSeleted > -1) {
+				MatchDetails currentMatch = matches.get(matchSeleted);
+				matches.remove(currentMatch);
+				System.out.println("Match finished!");
+			} else {
+				System.out.println("Please select a valid match.");
+			}
+		} else {
+			System.out.println("No Match details found. Please start a match.");
+		} 
+	}
+	
+	private boolean matchesExist() {
+		if (matches.size() > 0) {
+			for (int i = 0; i < matches.size(); i++) {
+				System.out.println((i + 1) + ". " + matches.get(i).getHomeTeam() + " - " + matches.get(i).getAwayTeam());
+			}
+			System.out.println("Enter the match number you want to finish :");
+			return true;
+		}
+		return false;
 	}
 
 }
