@@ -6,7 +6,6 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-
 public class FootballDashboardImpl implements FootballDashborad {
 	
 	private List<MatchDetails> matches = new ArrayList<>();
@@ -32,7 +31,7 @@ public class FootballDashboardImpl implements FootballDashborad {
 					break;
 				}
 				case 3 -> {
-					printOption(3);
+					updateMatch(in);
 					break;
 				}
 				case 4 -> {
@@ -48,7 +47,7 @@ public class FootballDashboardImpl implements FootballDashborad {
 				}
 				}
 			} catch (InputMismatchException ime) {
-				System.out.println("Please enter an integer value between 1 and " + options.size());
+				System.out.println("Please enter an integer value from the above available options");
 				in.next();
 			}
 		}
@@ -95,7 +94,7 @@ public class FootballDashboardImpl implements FootballDashborad {
 	}
 	
 	private void finishMatch(Scanner sc) {
-		if (matchesExist()) {
+		if (matchesExist("finish")) {
 			int matchSeleted = sc.nextInt() - 1;
 			if (matchSeleted < matches.size() && matchSeleted > -1) {
 				MatchDetails currentMatch = matches.get(matchSeleted);
@@ -105,19 +104,44 @@ public class FootballDashboardImpl implements FootballDashborad {
 				System.out.println("Please select a valid match.");
 			}
 		} else {
-			System.out.println("No Match details found. Please start a match.");
+			System.out.println("No Match details found to finish. Please start a match.");
 		} 
 	}
 	
-	private boolean matchesExist() {
+	private boolean matchesExist(String action) {
 		if (matches.size() > 0) {
 			for (int i = 0; i < matches.size(); i++) {
 				System.out.println((i + 1) + ". " + matches.get(i).getHomeTeam() + " - " + matches.get(i).getAwayTeam());
 			}
-			System.out.println("Enter the match number you want to finish :");
+			System.out.println("Enter the match number you want to "+ action+" :");
 			return true;
 		}
 		return false;
+	}
+	
+	private void updateMatch(Scanner sc) {
+		if (matchesExist("update")) {
+			int matchSeleted = sc.nextInt() - 1;
+			if (matchSeleted < matches.size() && matchSeleted > -1) {
+				MatchDetails currentMatch = matches.get(matchSeleted);
+				currentMatch = capturePoints(sc, currentMatch);
+				matches.set(matchSeleted, currentMatch);
+			} else {
+				System.out.println("Please select a valid match.");
+			}
+		} else {
+			System.out.println("No Match details found to update. Please start a match.");
+		} 
+	}
+	
+	private MatchDetails capturePoints(Scanner sc, MatchDetails match) {
+		System.out.println("Enter "+ match.getHomeTeam() +" team points: ");
+		int homeTeamPoints = sc.nextInt();
+		System.out.println("Enter "+ match.getAwayTeam() +" team points: ");
+		int awayTeamPoints = sc.nextInt();
+		match.setHomeTeamPoints(homeTeamPoints);
+		match.setAwayTeamPoints(awayTeamPoints);
+		return match;
 	}
 
 }
