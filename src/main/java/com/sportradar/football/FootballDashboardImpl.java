@@ -6,6 +6,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+
 public class FootballDashboardImpl implements FootballDashborad {
 	
 	private List<MatchDetails> matches = new ArrayList<>();
@@ -23,7 +24,7 @@ public class FootballDashboardImpl implements FootballDashborad {
 				optionSelected = in.nextInt();
 				switch (optionSelected) {
 				case 1 -> {
-					printOption(1);
+					startMatch(in);
 					break;
 				}
 				case 2 -> {
@@ -63,6 +64,34 @@ public class FootballDashboardImpl implements FootballDashborad {
 	
 	private void printOption(int i) {
 		System.out.println("Selected option "+i);
+	}
+	
+	private void startMatch(Scanner sc) {
+		MatchDetails currentMatch = captureNames(sc);
+		if (validMatch(currentMatch)) { 
+			matches.add(currentMatch); 
+			System.out.println("Success! Match started!");
+		}
+	}
+	
+	private MatchDetails captureNames(Scanner sc) {
+		System.out.println("Enter home team name: ");
+		String homeTeam = sc.next();
+		System.out.println("Enter away team name: ");
+		String awayTeam = sc.next();
+		return new MatchDetails(homeTeam, awayTeam, 0, 0);
+	}
+	
+	private boolean validMatch(MatchDetails currentMatch) {
+		if (currentMatch.getHomeTeam().equalsIgnoreCase(currentMatch.getAwayTeam())) {
+			System.out.println("Both team names should not be same. Please provide different names. Match not started!");
+			return false;
+		}
+		if (currentMatch.findAnyExistingMatch(matches)) {
+			System.out.println("Match details already present. Please choose to update match details.");
+			return false;
+		}
+		return true;
 	}
 
 }

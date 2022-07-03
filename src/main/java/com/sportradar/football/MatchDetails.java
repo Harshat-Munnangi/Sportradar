@@ -1,6 +1,7 @@
 package com.sportradar.football;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class MatchDetails {
 
@@ -45,6 +46,10 @@ public class MatchDetails {
 	}
 	public void setAwayTeamPoints(int awayTeamPoints) {
 		this.awayTeamPoints = awayTeamPoints;
+	}
+	
+	public boolean findAnyExistingMatch(List<MatchDetails> matches) {
+		return matches.stream().anyMatch(e -> e.homeTeam.equals(this.homeTeam) && e.awayTeam.equals(this.awayTeam));
 	}
 	
 }
