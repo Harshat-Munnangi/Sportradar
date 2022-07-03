@@ -47,6 +47,4 @@ public class MatchDetails {
 		this.awayTeamPoints = awayTeamPoints;
 	}
 	
-	
-	
 }
