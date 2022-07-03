@@ -35,7 +35,7 @@ public class FootballDashboardImpl implements FootballDashborad {
 					break;
 				}
 				case 4 -> {
-					printOption(4);
+					showDashboard();
 					break;
 				}
 				case 5 -> {
@@ -54,17 +54,12 @@ public class FootballDashboardImpl implements FootballDashborad {
 		in.close();
 	}
 	
-	
 	private void showMenu(List<String> options) {
 		System.out.println("--------------------------------------------------");
 		options.forEach(System.out::println);
 		System.out.println("Please select an option:");
 	}
-	
-	private void printOption(int i) {
-		System.out.println("Selected option "+i);
-	}
-	
+
 	private void startMatch(Scanner sc) {
 		MatchDetails currentMatch = captureNames(sc);
 		if (validMatch(currentMatch)) { 
@@ -143,5 +138,23 @@ public class FootballDashboardImpl implements FootballDashborad {
 		match.setAwayTeamPoints(awayTeamPoints);
 		return match;
 	}
-
+	
+	private void showDashboard() {
+		if (matches.size() > 0) {
+			matches.sort((m1, m2) -> {
+				int total1 = m1.getHomeTeamPoints() + m1.getAwayTeamPoints();
+				int total2 = m2.getHomeTeamPoints() + m2.getAwayTeamPoints();
+				if(total1 > total2) {
+					return -1; 
+				} else if(total1 == total2) {
+					return m2.getCreatedTime().compareTo(m1.getCreatedTime());
+				} else {
+					return 1; 
+				}
+			});
+			matches.forEach(System.out::println);
+		} else {
+			System.out.println("No Match details found. Please start a match.");
+		}
+	}
 }
